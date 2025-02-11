@@ -1,0 +1,61 @@
+name: Veracode Build Artifact
+
+run-name: Veracode Build Artifact
+
+on:
+  repository_dispatch:
+    types: [test-custom-build]
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    name: register
+    steps:
+      - name: Register build
+        id: register-build
+        uses: veracode/github-actions-integration-helper@main
+        with:
+          action: registerBuild
+          token: ${{ github.event.client_payload.token }}
+          appname: ${{ github.event.client_payload.user_config.profile_name }}
+          source_repository: ${{ github.event.client_payload.repository.full_name }}
+          check_run_id: ${{ github.run_id }}
+          check_run_name: ${{ github.workflow }}
+          head_sha: ${{ github.event.client_payload.sha }}
+          event_type: ${{ github.event.client_payload.event_type }}
+          branch: ${{ github.event.client_payload.user_config.sandbox_scan.branch }}
+          issue_trigger_flow: ${{ github.event.client_payload.user_config.issue_trigger_flow }}
+
+  build:
+    needs: register
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ github.event.client_payload.repository.full_name }}
+        ref: ${{ github.event.client_payload.sha }}
+        token: ${{ github.event.client_payload.token }}
+        path: 'source-code'
+        
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v4
+      with:
+        java-version: 1.8
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+
+    - name: Setup Flutter SDK
+      uses: flutter-actions/setup-flutter@v2
+      with:
+        channel: stable
+        version: 3.0.2
+
+    - name: Build Flutter App
+      run: flutter build apk --debug
+        
+    - uses: actions/upload-artifact@v4
+      with:
+        name: veracode-artifact
+        path: "build/app/outputs/flutter-apk"
+        if-no-files-found: error
