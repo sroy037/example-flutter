@@ -37,6 +37,9 @@ jobs:
         token: ${{ github.event.client_payload.token }}
         path: 'source-code'
         
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
     - name: Set up Java
       uses: actions/setup-java@v4
       with:
@@ -50,7 +53,18 @@ jobs:
       uses: flutter-actions/setup-flutter@v2
       with:
         channel: stable
-        version: 3.3.0
+        version: latest  # Ensures the latest Flutter & Dart SDK
+
+    - name: Check Dart Version
+      run: dart --version  # Verify Dart SDK is 3.3.0+
+
+    - name: Upgrade Flutter
+      run: flutter upgrade  # Ensures compatibility
+
+    - name: Flutter Pub Get
+      run: |
+        cd source-code
+        flutter pub get  # Ensures dependencies are fetched properly
 
     - name: Build Flutter App
       run: |
