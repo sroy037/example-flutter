@@ -53,10 +53,12 @@ jobs:
         version: 3.0.2
 
     - name: Build Flutter App
-      run: flutter build apk --debug
+      run: |
+        cd source-code
+        flutter build apk --debug
         
     - uses: actions/upload-artifact@v4
       with:
         name: veracode-artifact
-        path: "build/app/outputs/flutter-apk"
+        path: "source-code/build/app/outputs/flutter-apk"
         if-no-files-found: error
