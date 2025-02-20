@@ -1,4 +1,4 @@
-# Syncfusion<sup>&reg;</sup> Flutter examples.
+# Syncfusion<sup>&reg;</sup> Flutter examples...
 
 This repository contains awesome demos of [Syncfusion<sup>&reg;</sup> Flutter UI widgets](https://www.syncfusion.com/flutter-widgets). This is the best place to check our widgets to get more insight into the usage of APIs. You can also check our widgets by installing the complete Flutter sample browser from [Google Play Store](https://play.google.com/store/apps/details?id=com.syncfusion.flutter.examples) or [App Store](https://apps.apple.com/us/app/syncfusion-flutter-ui-widgets/id1475231341), in which you can browse the demo for all the widgets and view the source code of each sample within the app itself.
 
